@@ -81,6 +81,9 @@ module "ec2_instance" {
 
   availability_zone = data.aws_availability_zones.azs.names[0]
 
+  # Add role to the instance
+  iam_role_name = "sharing_session_eks_jenkins"
+
   tags = {
     Name = "jenkins-instance"
     Terraform   = "true"

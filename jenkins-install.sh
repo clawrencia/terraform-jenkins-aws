@@ -19,7 +19,7 @@ sudo systemctl start jenkins
 # Install Git
 sudo yum install -y git
 
-# Install AWS CLI
+# Install aws cli
 sudo yum install aws-cli -y 
 
 # Install Terraform
