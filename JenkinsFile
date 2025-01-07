@@ -1,0 +1,52 @@
+pipeline {
+    agent any
+    environment {
+        AWS_REGION = 'ap-southeast-1'
+    }
+    stages {
+        stage('Check IAM Role Access') {
+            steps {
+                sh 'aws sts get-caller-identity'
+            }
+        }
+        stage('Checkout Repository') {
+            steps {
+                script {
+                    checkout scmGit(
+                        branches: [[name: '*/main']],
+                        extensions: [],
+                        userRemoteConfigs: [[url: 'https://github.com/clawrencia/terraform-jenkins-aws.git']]
+                    )
+                }
+            }
+        }
+        stage('Initialising Terraform') {
+            steps {
+                script {
+                    dir('eks'){
+                        sh 'terraform init'
+                    }
+                }
+            }
+        }
+        stage('Format Terraform') {
+            steps {
+                script {
+                    dir('eks'){
+                        sh 'terraform fmt'
+                    }
+                }
+            }
+        }
+        stage('Terraform Plan') {
+            steps {
+                script {
+                    dir('eks'){
+                        sh 'terraform plan'
+                    }
+                }
+            }
+        }
+        
+    }
+}
